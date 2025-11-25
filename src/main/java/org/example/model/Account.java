@@ -4,11 +4,11 @@ import org.example.exception.InsufficientFundsException;
 
 public abstract class Account {
 
-    private final String accountID;
+    private String accountID;
 
-    private final User owner;
+    private User owner;
 
-    private final double balance;
+    private double balance;
 
     public Account(String accountID, User owner, double initial ) {
         this.accountID = accountID;
@@ -28,9 +28,28 @@ public abstract class Account {
         return balance;
     }
 
-    public void deposit(double amount) {
-        double totalBalance = balance + amount;
+    public void setAccountID(String accountID) {
+        this.accountID = accountID;
     }
 
-    public abstract void withdraw(double amount) throws InsufficientFundsException;
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public void deposit(double amount) {
+        double totalBalance = balance + amount;
+        setBalance(totalBalance);
+    }
+
+    public void withdraw(double amount) throws InsufficientFundsException {
+        if(amount>balance) {
+            throw new InsufficientFundsException();
+        }
+        double totalBalance = balance - amount;
+        setBalance(totalBalance);
+    }
 }

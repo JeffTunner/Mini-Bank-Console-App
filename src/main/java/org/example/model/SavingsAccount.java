@@ -17,11 +17,10 @@ public class SavingsAccount extends Account{
             throw new InsufficientFundsException();
         }
         double totalBalance = getBalance() - amount;
-        System.out.println(totalBalance);
+        setBalance(totalBalance);
     }
 
     public void applyInterest(double amount) {
         double totalBalance = (amount * interestRate) + amount;
-        System.out.println(totalBalance);
     }
 }
