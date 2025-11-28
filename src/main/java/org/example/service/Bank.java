@@ -90,6 +90,7 @@ public class Bank {
                     break;
                 } else if (amount > account.getBalance()) {
                     System.out.println("INSUFFICIENT FUNDS!!! \nCannot transfer!!!");
+                    break;
                 }
                 account.withdraw(amount);
                 Transaction transaction = new Transaction( UUID.randomUUID().toString(), fromId, toId, amount, new Date().toString(), TransactionType.TRANSFER);
