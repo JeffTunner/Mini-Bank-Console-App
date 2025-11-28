@@ -64,9 +64,7 @@ public class Main {
                     System.out.println("Enter from Account Id, to Account Id, and a amount ");
                     sc.nextLine();
                     String from = sc.nextLine();
-                    sc.nextLine();
                     String to = sc.nextLine();
-                    sc.nextLine();
                     double transferAmt = sc.nextDouble();
                     bank.transfer(from, to, transferAmt);
                     break;

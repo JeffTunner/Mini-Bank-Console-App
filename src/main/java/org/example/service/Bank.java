@@ -82,7 +82,7 @@ public class Bank {
     }
 
     public void transfer(String fromId, String toId, double amount) {
-        boolean transfer = false;
+        int transfer = 0;
         for(Account account: accounts) {
             if(account.getAccountId().equals(fromId)) {
                 if(amount < 0) {
@@ -94,8 +94,7 @@ public class Bank {
                 account.withdraw(amount);
                 Transaction transaction = new Transaction( UUID.randomUUID().toString(), fromId, toId, amount, new Date().toString(), TransactionType.TRANSFER);
                 account.addTransaction(transaction);
-                transfer = true;
-                break;
+                transfer++;
             }
         }
 
@@ -108,12 +107,11 @@ public class Bank {
                 account.deposit(amount);
                 Transaction transaction = new Transaction( UUID.randomUUID().toString(), fromId, toId, amount, new Date().toString(), TransactionType.TRANSFER);
                 account.addTransaction(transaction);
-                transfer = true;
-                break;
+                transfer++;
             }
         }
 
-        if(transfer) {
+        if(transfer == 2) {
             System.out.println("TRANSFER SUCCESSFUL!!!");
         } else {
             System.out.println("INVALID ID!!!");
