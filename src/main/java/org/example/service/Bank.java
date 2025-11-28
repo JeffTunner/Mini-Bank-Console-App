@@ -5,24 +5,25 @@ import org.example.entities.Transaction;
 import org.example.entities.TransactionType;
 import org.example.entities.User;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public class Bank {
 
-    List<Account> accounts;
+    ArrayList<Account> accounts = new ArrayList<>();
 
-    public void createAccount(String accountId, User owner, double balance, String createdAt, List<Transaction> transactionHistory) {
-        Account newAccount = new Account(accountId, owner, balance, createdAt, transactionHistory);
+    public void createAccount(String accountId, User owner, double balance, String createdAt) {
+        Account newAccount = new Account(accountId, owner, balance, createdAt);
         accounts.add(newAccount);
-        System.out.println("Account successfully created!!!");
+        System.out.println("Account with AccountId: " +accountId + " successfully created!!!");
     }
 
     public void findAccount(String accountId) {
         boolean found = false;
         for(Account account: accounts) {
-            if(account.getAccountId() == accountId) {
+            if(account.getAccountId().equals(accountId)) {
                 found = true;
                 break;
             }
@@ -37,7 +38,7 @@ public class Bank {
     public void deposit(String accountId, double amount) {
         boolean found = false;
         for(Account account: accounts) {
-            if(account.getAccountId() == accountId) {
+            if(account.getAccountId().equals(accountId)) {
                 if(amount < 0) {
                     System.out.println("Amount cannot be Negative!!!");
                     break;
@@ -59,7 +60,7 @@ public class Bank {
     public void withdraw(String accountId, double amount) {
         boolean found = false;
         for(Account account: accounts) {
-            if(account.getAccountId() == accountId) {
+            if(account.getAccountId().equals(accountId)) {
                 if(amount < 0) {
                     System.out.println("Amount cannot be Negative!!!");
                     break;
@@ -83,7 +84,7 @@ public class Bank {
     public void transfer(String fromId, String toId, double amount) {
         boolean transfer = false;
         for(Account account: accounts) {
-            if(account.getAccountId() == fromId) {
+            if(account.getAccountId().equals(fromId)) {
                 if(amount < 0) {
                     System.out.println("Amount cannot be Negative!!!");
                     break;
@@ -99,7 +100,7 @@ public class Bank {
         }
 
         for(Account account: accounts) {
-            if(account.getAccountId() == toId) {
+            if(account.getAccountId().equals(toId)) {
                 if(amount < 0) {
                     System.out.println("Amount cannot be Negative!!!");
                     break;
@@ -123,7 +124,7 @@ public class Bank {
         boolean found = false;
         Account showAccount = null;
         for(Account account: accounts) {
-            if(account.getAccountId() == accountId) {
+            if(account.getAccountId().equals(accountId)) {
                 showAccount = account;
                 found = true;
                 break;
@@ -144,7 +145,7 @@ public class Bank {
         boolean found = false;
         Account showAccount = null;
         for(Account account: accounts) {
-            if(account.getAccountId() == accountId) {
+            if(account.getAccountId().equals(accountId)) {
                 showAccount = account;
                 found = true;
                 break;
@@ -152,7 +153,14 @@ public class Bank {
         }
         if(found) {
             System.out.println("Transaction History of "+accountId);
-            System.out.println(showAccount.getTransactionHistory());
+            for(Transaction transaction: showAccount.getTransactionHistory()) {
+                System.out.println("Transaction ID: " +transaction.getTransactionId() +
+                        " \n From: " +transaction.getFromAccId() +
+                        " \n To: " +transaction.getToAccId() +
+                        " \n Amount: " +transaction.getAmount() +
+                        " \n TimeStamp: " +transaction.getTimestamp() +
+                        " \n Type: " +transaction.getType());
+            }
         } else {
             System.out.println("INVALID ACCOUNT ID!!!");
         }
@@ -161,7 +169,7 @@ public class Bank {
     public void deleteAccount(String accountId) {
         boolean found = false;
         for(Account account: accounts) {
-            if(account.getAccountId() == accountId) {
+            if(account.getAccountId().equals(accountId)) {
                 accounts.remove(account);
                 found = true;
                 break;

@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Account {
@@ -8,14 +9,13 @@ public class Account {
     private User owner;
     private double balance;
     private String createdAt;
-    private List<Transaction> transactionHistory;
+    private ArrayList<Transaction> transactionHistory = new ArrayList<>();
 
-    public Account(String accountId, User owner, double balance, String createdAt, List<Transaction> transactionHistory) {
+    public Account(String accountId, User owner, double balance, String createdAt) {
         this.accountId = accountId;
         this.owner = owner;
         this.balance = balance;
         this.createdAt = createdAt;
-        this.transactionHistory = transactionHistory;
     }
 
     // SETTERS
@@ -36,7 +36,7 @@ public class Account {
     }
 
     public void setTransactionHistory(List<Transaction> transactionHistory) {
-        this.transactionHistory = transactionHistory;
+        this.transactionHistory = (ArrayList<Transaction>) transactionHistory;
     }
 
     // GETTERS
@@ -60,12 +60,12 @@ public class Account {
         return transactionHistory;
     }
 
-    public double deposit(double amount) {
-        return this.balance + amount;
+    public void deposit(double amount) {
+        setBalance(this.balance + amount);
     }
 
-    public double withdraw(double amount) {
-        return this.balance - amount;
+    public void withdraw(double amount) {
+        setBalance(this.balance - amount);
     }
 
     public void addTransaction(Transaction transaction) {
