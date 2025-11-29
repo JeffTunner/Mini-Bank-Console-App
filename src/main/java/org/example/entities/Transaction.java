@@ -67,4 +67,13 @@ public class Transaction {
     public void setType(TransactionType type) {
         this.type = type;
     }
+
+    public void transactionDetails() {
+        System.out.println("Transaction ID: " +this.getTransactionId() +
+                " \n From: " +this.getFromAccId() +
+                " \n To: " +this.getToAccId() +
+                " \n Amount: " +this.getAmount() +
+                " \n TimeStamp: " +this.getTimestamp() +
+                " \n Type: " +this.getType());
+    }
 }

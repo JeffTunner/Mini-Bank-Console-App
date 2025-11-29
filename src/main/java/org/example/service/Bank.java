@@ -52,62 +52,53 @@ public class Bank {
     }
 
     public void deposit(String accountId, double amount) {
-        boolean found = false;
         for(Account account: accounts) {
             if(account.getAccountId().equals(accountId)) {
                 account.deposit(amount);
-                Transaction transaction = new Transaction( UUID.randomUUID().toString(), accountId, accountId, amount, new Date().toString(), TransactionType.DEPOSIT);
-                account.addTransaction(transaction);
-                found = true;
                 break;
+            } else {
+                System.out.println("Invalid Account ID!!!");
             }
-        }
-        if(found) {
-            System.out.println("Amount " +amount + " deposited to " +accountId);
-        } else {
-            System.out.println("Invalid Account ID!!!");
         }
     }
 
     public void withdraw(String accountId, double amount) {
-        boolean found = false;
         for(Account account: accounts) {
             if(account.getAccountId().equals(accountId)) {
                 account.withdraw(amount);
-                Transaction transaction = new Transaction( UUID.randomUUID().toString(), accountId, accountId, amount, new Date().toString(), TransactionType.WITHDRAW);
-                account.addTransaction(transaction);
-                found = true;
                 break;
+            } else {
+                System.out.println("Invalid Account ID!!!");
             }
-        }
-        if(found) {
-            System.out.println("Amount " +amount + " withdrawn from " +accountId);
-        } else {
-            System.out.println("Invalid Account ID!!!");
         }
     }
 
     public void transfer(String fromId, String toId, double amount) {
         int transfer = 0;
+        Account from = null;
+        Account to = null;
         for(Account account: accounts) {
             if(account.getAccountId().equals(fromId)) {
-                account.withdraw(amount);
-                Transaction transaction = new Transaction( UUID.randomUUID().toString(), fromId, toId, amount, new Date().toString(), TransactionType.TRANSFER);
-                account.addTransaction(transaction);
+                account.silentWithdraw(amount);
+                from = account;
                 transfer++;
             }
         }
 
         for(Account account: accounts) {
             if(account.getAccountId().equals(toId)) {
-                account.deposit(amount);
-                Transaction transaction = new Transaction( UUID.randomUUID().toString(), fromId, toId, amount, new Date().toString(), TransactionType.TRANSFER);
-                account.addTransaction(transaction);
+                account.silentDeposit(amount);
+                to = account;
                 transfer++;
             }
         }
 
         if(transfer == 2) {
+            Transaction transaction = new Transaction(UUID.randomUUID().toString(), fromId, toId, amount, new Date().toString(), TransactionType.TRANSFER);
+            assert from != null;
+            from.addTransaction(transaction);
+            assert to != null;
+            to.addTransaction(transaction);
             System.out.println("TRANSFER SUCCESSFUL!!!");
         } else {
             System.out.println("INVALID ID!!!");
@@ -138,12 +129,7 @@ public class Bank {
         if(found) {
             System.out.println("Transaction History of "+accountId);
             for(Transaction transaction: showAccount.getTransactionHistory()) {
-                System.out.println("Transaction ID: " +transaction.getTransactionId() +
-                        " \n From: " +transaction.getFromAccId() +
-                        " \n To: " +transaction.getToAccId() +
-                        " \n Amount: " +transaction.getAmount() +
-                        " \n TimeStamp: " +transaction.getTimestamp() +
-                        " \n Type: " +transaction.getType());
+                transaction.transactionDetails();
             }
         } else {
             System.out.println("INVALID ACCOUNT ID!!!");
@@ -165,5 +151,7 @@ public class Bank {
             System.out.println("INVALID ACCOUNT ID!!!");
         }
     }
+
+
 
 }

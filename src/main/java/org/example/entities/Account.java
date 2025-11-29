@@ -1,7 +1,9 @@
 package org.example.entities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class Account {
 
@@ -77,8 +79,17 @@ public abstract class Account {
              System.out.println("Amount Cannot be Negative!!!");
          } else {
              this.setBalance((this.getBalance() + amount));
+             Transaction transaction = new Transaction( UUID.randomUUID().toString(), this.getAccountId(), this.getAccountId(), amount, new Date().toString(), TransactionType.DEPOSIT);
+             addTransaction(transaction);
+             System.out.println("Amount " +amount + " deposited to " +accountId);
          }
     }
+
+    public void silentDeposit(double amount) {
+         this.setBalance(this.getBalance() + amount);
+    }
+
+    public abstract boolean silentWithdraw(double amount);
 
     public abstract void withdraw(double amount);
 
