@@ -3,19 +3,21 @@ package org.example.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
     private String accountId;
     private User owner;
     private double balance;
     private String createdAt;
     private ArrayList<Transaction> transactionHistory = new ArrayList<>();
+    private AccountType type;
 
-    public Account(String accountId, User owner, double balance, String createdAt) {
+     Account(String accountId, User owner, double balance, String createdAt, AccountType type) {
         this.accountId = accountId;
         this.owner = owner;
         this.balance = balance;
         this.createdAt = createdAt;
+        this.type = type;
     }
 
     // SETTERS
@@ -35,8 +37,12 @@ public class Account {
         this.createdAt = createdAt;
     }
 
-    public void setTransactionHistory(List<Transaction> transactionHistory) {
+    public void setTransactionHistory(ArrayList<Transaction> transactionHistory) {
         this.transactionHistory = (ArrayList<Transaction>) transactionHistory;
+    }
+
+    public void setType(AccountType type) {
+        this.type = type;
     }
 
     // GETTERS
@@ -60,15 +66,32 @@ public class Account {
         return transactionHistory;
     }
 
-    public void deposit(double amount) {
-        setBalance(this.balance + amount);
+    public AccountType getType() {
+        return type;
     }
 
-    public void withdraw(double amount) {
-        setBalance(this.balance - amount);
+    // METHODS
+
+    public void deposit(double amount) {
+         if(amount < 0) {
+             System.out.println("Amount Cannot be Negative!!!");
+         } else {
+             this.setBalance((this.getBalance() + amount));
+         }
     }
+
+    public abstract void withdraw(double amount);
 
     public void addTransaction(Transaction transaction) {
         this.transactionHistory.add(transaction);
     }
+
+    public void printDetails() {
+        System.out.println("Account ID: " +this.getAccountId() +
+                " \nOwner Name: " +this.getOwner().getName() +
+                " \nBalance: " +this.getBalance() +
+                " \nType: " +this.getType() +
+                " \nCreated At: " +this.getCreatedAt());
+    }
+
 }
