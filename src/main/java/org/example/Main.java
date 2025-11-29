@@ -23,10 +23,11 @@ public class Main {
             System.out.println("3 -> Deposit");
             System.out.println("4 -> Withdraw");
             System.out.println("5 -> Transfer");
-            System.out.println("6 -> Show Account Details");
-            System.out.println("7 -> Show Transaction History");
-            System.out.println("8 -> Delete an Account");
-            System.out.println("9 -> EXIT");
+            System.out.println("6 -> Apply Interest");
+            System.out.println("7 -> Show Account Details");
+            System.out.println("8 -> Show Transaction History");
+            System.out.println("9 -> Delete an Account");
+            System.out.println("10 -> EXIT");
 
             int ch = sc.nextInt();
 
@@ -78,22 +79,28 @@ public class Main {
                 case 6:
                     System.out.println("Enter Account ID: ");
                     sc.nextLine();
+                    String apply = sc.nextLine();
+                    bank.applyInterest(apply);
+                    break;
+                case 7:
+                    System.out.println("Enter Account ID: ");
+                    sc.nextLine();
                     String showId = sc.nextLine();
                     bank.showAccountDetails(showId);
                     break;
-                case 7:
+                case 8:
                     System.out.println("Enter Account ID: ");
                     sc.nextLine();
                     String transId = sc.nextLine();
                     bank.showTransactionHistory(transId);
                     break;
-                case 8:
+                case 9:
                     System.out.println("Enter ID to delete: ");
                     sc.nextLine();
                     String deleteId = sc.nextLine();
                     bank.deleteAccount(deleteId);
                     break;
-                case 9:
+                case 10:
                     System.out.println("THANK YOU FOR VISITING!!!");
                     isRunning = false;
                     break;

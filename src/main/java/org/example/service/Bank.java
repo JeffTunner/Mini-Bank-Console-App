@@ -152,6 +152,17 @@ public class Bank {
         }
     }
 
+    public void applyInterest(String accountId) {
+        for(Account account: accounts) {
+            if(account.getAccountId().equals(accountId)) {
+                if(account instanceof SavingsAccount) {
+                    SavingsAccount savingsAccount = (SavingsAccount) account;
+                    savingsAccount.applyInterest();
+                }
+            }
+        }
+    }
+
 
 
 }

@@ -68,6 +68,7 @@ public class SavingsAccount extends Account{
         }else {
             interest = (balance*this.rate)/100;
             deposit(interest);
+            System.out.println("Interest: "+interest + " successfully added!!!");
         }
     }
 }
