@@ -1,23 +1,39 @@
 package org.example.service;
 
-import org.example.entities.Account;
-import org.example.entities.Transaction;
-import org.example.entities.TransactionType;
-import org.example.entities.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.entities.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Bank {
 
+    Scanner sc = new Scanner(System.in);
+
     ArrayList<Account> accounts = new ArrayList<>();
 
-    public void createAccount(String accountId, User owner, double balance, String createdAt) {
-        Account newAccount = new Account(accountId, owner, balance, createdAt);
-        accounts.add(newAccount);
-        System.out.println("Account with AccountId: " +accountId + " successfully created!!!");
+    public void createAccount(String accountId, User owner, double balance, String createdAt, AccountType type) {
+        switch (type) {
+            case SAVINGS:
+                System.out.print("Enter Interest Rate: ");
+                double rate = sc.nextDouble();
+                SavingsAccount savingsAccount = new SavingsAccount(accountId, owner, balance, createdAt, type, rate);
+                accounts.add(savingsAccount);
+                System.out.println("Account with AccountId: " +accountId + " successfully created!!!");
+                break;
+            case CURRENT:
+                CurrentAccount currentAccount = new CurrentAccount(accountId, owner, balance, createdAt, type);
+                accounts.add(currentAccount);
+                System.out.println("Account with AccountId: " +accountId + " successfully created!!!");
+                break;
+            case BUSINESS:
+                BusinessAccount businessAccount = new BusinessAccount(accountId, owner, balance, createdAt, type);
+                accounts.add(businessAccount);
+                System.out.println("Account with AccountId: " +accountId + " successfully created!!!");
+                break;
+            default:
+                System.out.println("Invalid TYPE of Account!!!");
+                break;
+        }
     }
 
     public void findAccount(String accountId) {
@@ -39,10 +55,6 @@ public class Bank {
         boolean found = false;
         for(Account account: accounts) {
             if(account.getAccountId().equals(accountId)) {
-                if(amount < 0) {
-                    System.out.println("Amount cannot be Negative!!!");
-                    break;
-                }
                 account.deposit(amount);
                 Transaction transaction = new Transaction( UUID.randomUUID().toString(), accountId, accountId, amount, new Date().toString(), TransactionType.DEPOSIT);
                 account.addTransaction(transaction);
@@ -61,12 +73,6 @@ public class Bank {
         boolean found = false;
         for(Account account: accounts) {
             if(account.getAccountId().equals(accountId)) {
-                if(amount < 0) {
-                    System.out.println("Amount cannot be Negative!!!");
-                    break;
-                } else if (amount > account.getBalance()) {
-                    System.out.println("INSUFFICIENT FUNDS!!!");
-                }
                 account.withdraw(amount);
                 Transaction transaction = new Transaction( UUID.randomUUID().toString(), accountId, accountId, amount, new Date().toString(), TransactionType.WITHDRAW);
                 account.addTransaction(transaction);
@@ -85,13 +91,6 @@ public class Bank {
         int transfer = 0;
         for(Account account: accounts) {
             if(account.getAccountId().equals(fromId)) {
-                if(amount < 0) {
-                    System.out.println("Amount cannot be Negative!!!");
-                    break;
-                } else if (amount > account.getBalance()) {
-                    System.out.println("INSUFFICIENT FUNDS!!! \nCannot transfer!!!");
-                    break;
-                }
                 account.withdraw(amount);
                 Transaction transaction = new Transaction( UUID.randomUUID().toString(), fromId, toId, amount, new Date().toString(), TransactionType.TRANSFER);
                 account.addTransaction(transaction);
@@ -101,10 +100,6 @@ public class Bank {
 
         for(Account account: accounts) {
             if(account.getAccountId().equals(toId)) {
-                if(amount < 0) {
-                    System.out.println("Amount cannot be Negative!!!");
-                    break;
-                }
                 account.deposit(amount);
                 Transaction transaction = new Transaction( UUID.randomUUID().toString(), fromId, toId, amount, new Date().toString(), TransactionType.TRANSFER);
                 account.addTransaction(transaction);
@@ -120,23 +115,13 @@ public class Bank {
     }
 
     public void showAccountDetails(String accountId) {
-        boolean found = false;
-        Account showAccount = null;
         for(Account account: accounts) {
             if(account.getAccountId().equals(accountId)) {
-                showAccount = account;
-                found = true;
+                account.printDetails();
                 break;
+            } else {
+                System.out.println("INVALID ACCOUNT ID!!!");
             }
-        }
-        if(found) {
-            System.out.println("Account Details: ");
-            System.out.println("AccountID: " +showAccount.getAccountId() +
-                    " \n Owner Name: " +showAccount.getOwner().getName() +
-                    " \n Balance: " +showAccount.getBalance() +
-                    "\n Created At: " +showAccount.getCreatedAt());
-        } else {
-            System.out.println("INVALID ACCOUNT ID!!!");
         }
     }
 

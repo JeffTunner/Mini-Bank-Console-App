@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.entities.AccountType;
 import org.example.entities.Transaction;
 import org.example.entities.User;
 import org.example.service.Bank;
@@ -34,11 +35,17 @@ public class Main {
                     String accountId = UUID.randomUUID().toString();
                     String createdAt = new Date().toString();
                     double balance = 0.0;
+                    AccountType type = null;
                     System.out.println("Enter name of Owner: ");
                     sc.nextLine();
                     String name = sc.nextLine();
                     User owner = new User(name);
-                    bank.createAccount(accountId, owner, balance, createdAt);
+                    System.out.println("Enter type of account: 1) SAVINGS  2) CURRENT  3) BUSINESS ");
+                    int t = sc.nextInt();
+                    if(t == 1) {type = AccountType.SAVINGS;}
+                    else if(t == 2) {type = AccountType.CURRENT;}
+                    else if(t == 3) {type = AccountType.BUSINESS;}
+                    bank.createAccount(accountId, owner, balance, createdAt, type);
                     break;
                 case 2:
                     System.out.println("Enter Account Id to search: ");
