@@ -51,4 +51,16 @@ public class AccountService {
         }
     }
 
+    public boolean searchAccount(String accountId) {
+        for (Account account: accounts) {
+            if(account.getAccountId().equals(accountId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<Account> getAccounts() {
+        return accounts;
+    }
 }
