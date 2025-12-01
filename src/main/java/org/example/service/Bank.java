@@ -3,13 +3,17 @@ package org.example.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entities.*;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Bank {
 
     Scanner sc = new Scanner(System.in);
 
-    ArrayList<Account> accounts = new ArrayList<>();
+    AccountService accountService = new AccountService();
+
+    public Bank() throws IOException {
+    }
 
     public void createAccount(String accountId, User owner, double balance, String createdAt, AccountType type) {
         switch (type) {
@@ -17,17 +21,17 @@ public class Bank {
                 System.out.print("Enter Interest Rate: ");
                 double rate = sc.nextDouble();
                 SavingsAccount savingsAccount = new SavingsAccount(accountId, owner, balance, createdAt, type, rate);
-                accounts.add(savingsAccount);
+                accountService.addAccount(savingsAccount);
                 System.out.println("Account with AccountId: " +accountId + " successfully created!!!");
                 break;
             case CURRENT:
                 CurrentAccount currentAccount = new CurrentAccount(accountId, owner, balance, createdAt, type);
-                accounts.add(currentAccount);
+                accountService.addAccount(currentAccount);
                 System.out.println("Account with AccountId: " +accountId + " successfully created!!!");
                 break;
             case BUSINESS:
                 BusinessAccount businessAccount = new BusinessAccount(accountId, owner, balance, createdAt, type);
-                accounts.add(businessAccount);
+                accountService.addAccount(businessAccount);
                 System.out.println("Account with AccountId: " +accountId + " successfully created!!!");
                 break;
             default:
@@ -37,13 +41,7 @@ public class Bank {
     }
 
     public void findAccount(String accountId) {
-        boolean found = false;
-        for(Account account: accounts) {
-            if(account.getAccountId().equals(accountId)) {
-                found = true;
-                break;
-            }
-        }
+        boolean found = accountService.searchAccount(accountId);
         if(found) {
             System.out.println("Account: "+accountId + " FOUND!!!");
         } else {
@@ -52,24 +50,32 @@ public class Bank {
     }
 
     public void deposit(String accountId, double amount) {
-        for(Account account: accounts) {
+        boolean found = false;
+        for(Account account: accountService.getAccounts()) {
             if(account.getAccountId().equals(accountId)) {
                 account.deposit(amount);
+                accountService.saveAccounts();
+                found = true;
                 break;
-            } else {
-                System.out.println("Invalid Account ID!!!");
             }
+        }
+        if(!found) {
+                System.out.println("Invalid Account ID!!!");
         }
     }
 
     public void withdraw(String accountId, double amount) {
-        for(Account account: accounts) {
+        boolean found = false;
+        for(Account account: accountService.getAccounts()) {
             if(account.getAccountId().equals(accountId)) {
                 account.withdraw(amount);
+                accountService.saveAccounts();
+                found = true;
                 break;
-            } else {
-                System.out.println("Invalid Account ID!!!");
             }
+        }
+        if(!found) {
+            System.out.println("Invalid Account ID!!!");
         }
     }
 
@@ -77,17 +83,19 @@ public class Bank {
         int transfer = 0;
         Account from = null;
         Account to = null;
-        for(Account account: accounts) {
+        for(Account account: accountService.getAccounts()) {
             if(account.getAccountId().equals(fromId)) {
                 account.silentWithdraw(amount);
+                accountService.saveAccounts();
                 from = account;
                 transfer++;
             }
         }
 
-        for(Account account: accounts) {
+        for(Account account: accountService.getAccounts()) {
             if(account.getAccountId().equals(toId)) {
                 account.silentDeposit(amount);
+                accountService.saveAccounts();
                 to = account;
                 transfer++;
             }
@@ -106,20 +114,23 @@ public class Bank {
     }
 
     public void showAccountDetails(String accountId) {
-        for(Account account: accounts) {
+        boolean found = false;
+        for(Account account: accountService.getAccounts()) {
             if(account.getAccountId().equals(accountId)) {
                 account.printDetails();
+                found = true;
                 break;
-            } else {
-                System.out.println("INVALID ACCOUNT ID!!!");
             }
+        }
+        if(!found) {
+            System.out.println("Invalid Account ID!!!");
         }
     }
 
     public void showTransactionHistory(String accountId) {
         boolean found = false;
         Account showAccount = null;
-        for(Account account: accounts) {
+        for(Account account: accountService.getAccounts()) {
             if(account.getAccountId().equals(accountId)) {
                 showAccount = account;
                 found = true;
@@ -138,9 +149,9 @@ public class Bank {
 
     public void deleteAccount(String accountId) {
         boolean found = false;
-        for(Account account: accounts) {
+        for(Account account: accountService.getAccounts()) {
             if(account.getAccountId().equals(accountId)) {
-                accounts.remove(account);
+                accountService.deleteAccount(accountId);
                 found = true;
                 break;
             }
@@ -153,13 +164,21 @@ public class Bank {
     }
 
     public void applyInterest(String accountId) {
-        for(Account account: accounts) {
+        boolean found = false;
+        for(Account account: accountService.getAccounts()) {
             if(account.getAccountId().equals(accountId)) {
                 if(account instanceof SavingsAccount) {
                     SavingsAccount savingsAccount = (SavingsAccount) account;
                     savingsAccount.applyInterest();
+                    accountService.saveAccounts();
+                    found = true;
+                    break;
                 }
+                break;
             }
+        }
+        if(!found) {
+            System.out.println("Invalid Account ID!!!");
         }
     }
 
