@@ -105,6 +105,7 @@ public class Bank {
 
         if(transfer == 2) {
             Transaction transaction = new Transaction(UUID.randomUUID().toString(), fromId, toId, amount, new Date().toString(), TransactionType.TRANSFER);
+            transactionService.addTransaction(transaction);
             assert from != null;
             from.addTransaction(transaction);
             assert to != null;
