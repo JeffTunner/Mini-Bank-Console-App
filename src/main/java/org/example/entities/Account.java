@@ -1,10 +1,23 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = SavingsAccount.class, name = "savings"),
+        @JsonSubTypes.Type(value = CurrentAccount.class, name = "current"),
+        @JsonSubTypes.Type(value = BusinessAccount.class, name = "business")
+})
 public abstract class Account {
 
     private String accountId;

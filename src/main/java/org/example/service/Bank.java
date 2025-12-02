@@ -12,6 +12,8 @@ public class Bank {
 
     AccountService accountService = new AccountService();
 
+    TransactionService transactionService = new TransactionService();
+
     public Bank() throws IOException {
     }
 
@@ -107,6 +109,7 @@ public class Bank {
             from.addTransaction(transaction);
             assert to != null;
             to.addTransaction(transaction);
+            accountService.saveAccounts();
             System.out.println("TRANSFER SUCCESSFUL!!!");
         } else {
             System.out.println("INVALID ID!!!");
@@ -181,7 +184,5 @@ public class Bank {
             System.out.println("Invalid Account ID!!!");
         }
     }
-
-
 
 }
