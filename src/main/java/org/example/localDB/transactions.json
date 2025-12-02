@@ -1,1 +1,1 @@
-[]
+[{"transactionId":"4901b191-d4bd-4063-a9cc-faaa501185f0","fromAccId":"5dc6b491-8719-4fc3-b981-e1fc2d0dc49c","toAccId":"5dc6b491-8719-4fc3-b981-e1fc2d0dc49c","amount":1500.0,"timestamp":"Tue Dec 02 20:10:45 IST 2025","type":"DEPOSIT"},{"transactionId":"00162bae-a14c-4ad4-a477-cd86924e5952","fromAccId":"5dc6b491-8719-4fc3-b981-e1fc2d0dc49c","toAccId":"a40d23d1-06b4-4e79-919d-0d86159843c8","amount":5000.0,"timestamp":"Tue Dec 02 20:12:09 IST 2025","type":"TRANSFER"}]
