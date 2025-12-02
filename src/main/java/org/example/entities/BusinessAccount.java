@@ -10,6 +10,11 @@ public class BusinessAccount extends Account{
         super(accountId, owner, balance, createdAt, type);
     }
 
+    public BusinessAccount() {
+        super(null, null, 0, null, null);
+    }
+
+
     @Override
     public void withdraw(double amount) {
         double fee = 200.00;

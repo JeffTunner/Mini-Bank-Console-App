@@ -18,6 +18,8 @@ public class Transaction {
         this.type = type;
     }
 
+    public Transaction() {}
+
     // GETTERS
     public String getTransactionId() {
         return transactionId;

@@ -2,6 +2,7 @@ package org.example.entities;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.example.service.TransactionService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,9 +15,9 @@ import java.util.UUID;
         property = "type"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = SavingsAccount.class, name = "savings"),
-        @JsonSubTypes.Type(value = CurrentAccount.class, name = "current"),
-        @JsonSubTypes.Type(value = BusinessAccount.class, name = "business")
+        @JsonSubTypes.Type(value = SavingsAccount.class, name = "SAVINGS"),
+        @JsonSubTypes.Type(value = CurrentAccount.class, name = "CURRENT"),
+        @JsonSubTypes.Type(value = BusinessAccount.class, name = "BUSINESS")
 })
 public abstract class Account {
 
@@ -27,6 +28,8 @@ public abstract class Account {
     private ArrayList<Transaction> transactionHistory = new ArrayList<>();
     private AccountType type;
 
+    TransactionService transactionService = new TransactionService();
+
      Account(String accountId, User owner, double balance, String createdAt, AccountType type) {
         this.accountId = accountId;
         this.owner = owner;
@@ -34,6 +37,8 @@ public abstract class Account {
         this.createdAt = createdAt;
         this.type = type;
     }
+
+    protected Account() {}
 
     // SETTERS
     public void setAccountId(String accountId) {
@@ -108,6 +113,7 @@ public abstract class Account {
 
     public void addTransaction(Transaction transaction) {
         this.transactionHistory.add(transaction);
+        transactionService.addTransaction(transaction);
     }
 
     public void printDetails() {

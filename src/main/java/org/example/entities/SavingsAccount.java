@@ -13,6 +13,11 @@ public class SavingsAccount extends Account{
 
     }
 
+    public SavingsAccount() {
+        super(null, null, 0, null, null);
+    }
+
+
     public void setRate(double rate) {
         this.rate = rate;
     }

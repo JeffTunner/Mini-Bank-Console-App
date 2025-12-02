@@ -9,6 +9,11 @@ public class CurrentAccount extends Account{
         super(accountId, owner, balance, createdAt, type);
     }
 
+    public CurrentAccount() {
+        super(null, null, 0, null, null);
+    }
+
+
     @Override
     public boolean silentWithdraw(double amount) {
         double overdraftLimit = -10000.00;
